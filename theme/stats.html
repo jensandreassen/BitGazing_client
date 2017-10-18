@@ -18,10 +18,33 @@
     <link href="assets/css/main.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="assets/js/stats.js"></script>
-  <!--  <script src="assets/js/hover.zoom.js"></script>
-    <script src="assets/js/hover.zoom.conf.js"></script>
-   -->
+    <!--script src="assets/js/stats.js"></script-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function () {
+var e = document.getElementById("currency");
+var CUR = e.options[e.selectedIndex].text;
+  $.ajax({
+    url: "http://localhost:5000/currency/" + CUR,
+    headers: {"Accept": "application/json"}
+  })
+  .done(function (jcontent) { 
+
+    console.log(jcontent);
+
+    list = $('#markets');
+
+    for (i = 0; i < jcontent.length; i++) {
+      html = '<tr><td>' + jcontent[i]['market'] + '</td><td>' +
+      jcontent[i]['last_price'] +
+      '</td><td>' + jcontent[i]['market'] + '</td></tr>';
+
+      list.append(html);
+    }
+  });
+});
+</script>
  </head>
 
   <body>
@@ -53,27 +76,17 @@
   				<div class="col-lg-8 col-lg-offset-2 centered">
 
   					<h1>STATS</h1>
-            <select>
+            <select id="currency">
                 <option value="USD">USD</option>
                 <option value="EUR">EUR</option>
                 <option value="AUD">AUD</option>
                 <option value="SEK">SEK</option>
             </select>
-            <table style="width:100%">
+            <table style="width:100%" id="markets">
               <tr>
                 <th>Marknad</th>
                 <th>Kostnad</th>
                 <th>Andel</th>
-              </tr>
-              <tr>
-                <td>KRAKEN</td>
-                <td>1.555555</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>BITMAP</td>
-                <td>1.5666666</td>
-                <td>94</td>
               </tr>
             </table>
 
