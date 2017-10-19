@@ -9,7 +9,7 @@ function drawRegionsMap() {
     headers: {"Accept": "application/json"}
   }).done(function (currencies) {
     $.ajax({
-      url: "http://localhost:5010/volumes",
+      url: "http://localhost:5000/volumes",
       headers: {"Accept": "application/json"}
     }).done(function (volumes) {
       if(volumes.hasOwnProperty('USD')){
