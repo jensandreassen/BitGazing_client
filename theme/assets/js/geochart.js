@@ -3,7 +3,16 @@ google.charts.load('current', {
   'mapsApiKey': 'AIzaSyC1-rQet1lK5uWPJLtim9N4V90q5Pbzseg'
 });
 google.charts.setOnLoadCallback(drawRegionsMap);
+function getCurrencyinfo(){
+  $.ajax({
+    url: "http://country.io/currency.json",
+    headers: {"Accept": "application/json"}
+  })
+  .done(function (data) {
 
+    console.log(data);
+  })
+}
 function drawRegionsMap() {
   var data = google.visualization.arrayToDataTable([
     ['Currency', '%'],
@@ -21,12 +30,11 @@ function drawRegionsMap() {
           datalessRegionColor: '#f2f2f2',
           defaultColor: '#f5f5f5',
   };
-
   var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
-
   chart.draw(data, options);
   testApi();
 }
+
 function testApi(){
    console.log("Jag är här!");
    $.ajax({
