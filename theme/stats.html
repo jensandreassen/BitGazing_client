@@ -26,7 +26,7 @@ $(document).ready(function () {
 var e = document.getElementById("currency");
 var CUR = e.options[e.selectedIndex].text;
   $.ajax({
-    url: "http://localhost:5000/currency/" + CUR,
+    url: "http://localhost:5000/marketPrices/" + CUR,
     headers: {"Accept": "application/json"}
   })
   .done(function (jcontent) { 
