@@ -38,7 +38,7 @@ var CUR = e.options[e.selectedIndex].text;
     for (i = 0; i < jcontent.length; i++) {
       html = '<tr><td>' + jcontent[i]['market'] + '</td><td>' +
       jcontent[i]['last_price'] +
-      '</td><td>' + jcontent[i]['market'] + '</td></tr>';
+      '</td><td>' + jcontent[i]['marketCurrency'] + '</td></tr>';
 
       list.append(html);
     }
@@ -84,9 +84,9 @@ var CUR = e.options[e.selectedIndex].text;
             </select>
             <table style="width:100%" id="markets">
               <tr>
-                <th>Marknad</th>
-                <th>Kostnad</th>
-                <th>Andel</th>
+                <th>Market</th>
+                <th>Price in USD</th>
+                <th>Market base currency</th>
               </tr>
             </table>
 
