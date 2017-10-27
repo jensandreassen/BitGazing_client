@@ -18,42 +18,45 @@
     <link href="assets/css/main.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <!--script src="assets/js/stats.js"></script-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-<script type="text/javascript">
-function myFunction(){
-$(document).ready(function () {
-list = $('#markets');
-list.children().remove();
-var e = document.getElementById("currency");
-var CUR = e.options[e.selectedIndex].value;
-list.append(
-              '<tr>' + 
-                '<th>Market</th>' +
-                '<th>Price in ' + CUR + '</th>' +
-                '<th>Market base currency</th>' +
-                '</tr>');
-  $.ajax({
-    url: "http://localhost:5000/marketPrices/" + CUR,
-    headers: {"Accept": "application/json"}
-  })
-  .done(function (jcontent) { 
-
-    for (i = 0; i < jcontent.length; i++) {
-      html = '<tr><td>' + jcontent[i]['market'] + '</td><td>' +
-      jcontent[i]['last_price'] +
-      '</td><td>' + jcontent[i]['marketCurrency'] + '</td></tr>';
-
-      list.append(html);
+    <script type="text/javascript">
+      /**
+       * Function will fetch all market data to the #markets table and
+       * if there already is loaded content that will be replaced.
+       * Changeing currency in #currencies will call this function as
+       * will pageload.
+       */
+    function loadMarkets(){
+    $(document).ready(function () {
+    list = $('#markets');
+    list.children().remove();
+    var e = document.getElementById("currency");
+    var CUR = e.options[e.selectedIndex].value;
+    list.append(
+                    '<tr>' + 
+                    '<th>Market</th>' +
+                    '<th>Price in ' + CUR + '</th>' +
+                    '<th>Market base currency</th>' +
+                    '</tr>');
+      $.ajax({
+        url: "http://localhost:5000/marketPrices/" + CUR,
+        headers: {"Accept": "application/json"}
+      })
+      .done(function (jcontent) { 
+        for (i = 0; i < jcontent.length; i++) {
+          html = '<tr><td>' + jcontent[i]['market'] + '</td><td>' +
+          jcontent[i]['last_price'] +
+          '</td><td>' + jcontent[i]['marketCurrency'] + '</td></tr>';
+          list.append(html);
+        }
+      });
+    });
     }
-  });
-});
-}
-window.onload = function() {
-  myFunction();
-};
-</script>
+    window.onload = function() {
+      loadMarkets();
+    };
+    </script>
  </head>
 
   <body>
@@ -84,8 +87,10 @@ window.onload = function() {
   			<div class="row">
   				<div class="col-lg-8 col-lg-offset-2 centered">
 
-  					<h1>STATS</h1>
-            <select id="currency" onchange="myFunction()">
+            <h1></br>MARKET BITCOIN PRICES</h1>
+            <p>Markets last price for one Bitcoin starting with the
+              cheapest</p>
+            <select id="currency" onchange="loadMarkets()">
               <option value="USD" selected="selected">United States Dollars</option>
               <option value="EUR">Euro</option>
               <option value="GBP">United Kingdom Pounds</option>
@@ -139,7 +144,7 @@ window.onload = function() {
               <option value="XPD">Palladium Ounces</option>
               <option value="XPT">Platinum Ounces</option>
             </select>
-            <table style="width:100%" id="markets">
+            <table style="width:100%" id="markets" align="left">
             </table>
 
   				</div><!-- /col-lg-8 -->
