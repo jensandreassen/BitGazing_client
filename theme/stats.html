@@ -50,7 +50,14 @@
           '</td><td>' + jcontent[i]['marketCurrency'] + '</td></tr>';
           list.append(html);
         }
-      });
+      })
+      .fail(function(){
+        html = '<tr><td> - - </td><td>' +
+          ' - - </td><td> - - </td></tr>';
+                list.append(html);
+        window.alert("Connection to server failed");
+
+    });
     });
     }
     window.onload = function() {
@@ -90,6 +97,8 @@
             <h1></br>MARKET BITCOIN PRICES</h1>
             <p>Markets last price for one Bitcoin starting with the
               cheapest</p>
+            <!--All currencies that BitGazing support, the value
+            should be added to uri-->
             <select id="currency" onchange="loadMarkets()">
               <option value="USD" selected="selected">United States Dollars</option>
               <option value="EUR">Euro</option>
