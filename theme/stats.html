@@ -19,7 +19,6 @@
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-
     <script type="text/javascript">
       /**
        * Function will fetch all market data to the #markets table and
@@ -51,13 +50,17 @@
           list.append(html);
         }
       })
-      .fail(function(){
+      /**
+       * If ajax fails to get the information for some reason, error
+       * codes are handled here. 
+       */
+      .fail(function(jqxhr){
         html = '<tr><td> - - </td><td>' +
           ' - - </td><td> - - </td></tr>';
                 list.append(html);
-        window.alert("Connection to server failed");
-
-    });
+                $('#description').append("<p>The server is not responding: " + jqxhr.status +
+                    '</p>');
+      });
     });
     }
     window.onload = function() {
@@ -65,7 +68,6 @@
     };
     </script>
  </head>
-
   <body>
 
     <!-- Static navbar -->
@@ -95,7 +97,7 @@
   				<div class="col-lg-8 col-lg-offset-2 centered">
 
             <h1></br>MARKET BITCOIN PRICES</h1>
-            <p>Markets last price for one Bitcoin starting with the
+            <p id="description">Markets last price for one Bitcoin starting with the
               cheapest</p>
             <!--All currencies that BitGazing support, the value
             should be added to uri-->
@@ -153,6 +155,7 @@
               <option value="XPD">Palladium Ounces</option>
               <option value="XPT">Platinum Ounces</option>
             </select>
+            <!-- Market data are stored in this table -->
             <table style="width:100%" id="markets" align="left">
             </table>
 
