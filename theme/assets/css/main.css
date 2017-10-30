@@ -35,6 +35,7 @@ h1 {
 
 
 
+
 /* Paragraph & Typographic */
 p {
     line-height: 28px;
@@ -140,14 +141,6 @@ a:after {
 
 
 /* +++++ WRAP SECTIONS +++++ */
-
-#welcomeText {
-  font-size: 24px;
-}
-
-#mapText {
-  font-size: 24px;
-}
 
 #ww {
 	padding-top: 70px;

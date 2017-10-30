@@ -14,6 +14,7 @@ google.charts.load('current', {
 *for the geochart Api
 */
 google.charts.setOnLoadCallback(drawRegionsMap);
+
 function drawRegionsMap() {
   //For currency to coutry-conversion
   $.ajax({
@@ -22,39 +23,44 @@ function drawRegionsMap() {
   }).done(function (currencies) {
     //For volumes totaled by currencies
     $.ajax({
-      url: "http://localhost:5037/volumes",
+      url: "http://localhost:5000/volumes",
       headers: {"Accept": "application/json"}
     }).done(function (volumes) {
+        if(volumes.hasOwnProperty('USD')){
+          //COnstructs an array containing wanted info
+          var textArray = "[['Country', 'Currency', 'BTC Volume'],";
+          for(var key in volumes){
+              var arr = getKeyByValue(currencies, key);
+              for(var code in arr){
+                textArray += "['" + arr[code] + "', '" + key + "', " + volumes[key] + "],";
+              }
+          }
+          //Formats array and adds options for GeoChart api
+          var googleCommand = textArray.slice(0,-1) + "]";
+          googleCommand = googleCommand.replace(/'/g, '"');
+          var data = google.visualization.arrayToDataTable(JSON.parse(googleCommand));
+          var options = {
+            colorAxis: {colors: ['#ffffff', '#28fc8c']},
+                  backgroundColor: '#f2f2f2',
+                  datalessRegionColor: '#f2f2f2',
+                  defaultColor: '#f5f5f5',
+          };
+          //Initializes map
+          var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+          chart.draw(data, options);
 
-        //COnstructs an array containing wanted info
-        var textArray = "[['Country', 'Currency', 'BTC'],";
-        for(var key in volumes){
-            var arr = getKeyByValue(currencies, key);
-            for(var code in arr){
-              textArray += "['" + arr[code] + "', '" + key + "', " + volumes[key] + "],";
-            }
+        } else {
+          console.log(volumes);
+          showError(volumes.status);
         }
-        //Formats array and adds options for GeoChart api
-        var googleCommand = textArray.slice(0,-1) + "]";
-        googleCommand = googleCommand.replace(/'/g, '"');
-        var data = google.visualization.arrayToDataTable(JSON.parse(googleCommand));
-        var options = {
-          colorAxis: {colors: ['#ffffff', '#28fc8c']},
-                backgroundColor: '#f2f2f2',
-                datalessRegionColor: '#f2f2f2',
-                defaultColor: '#f5f5f5',
-        };
-        //Initializes map
-        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
-        chart.draw(data, options);
 
     //If api call fails
     }).fail(function (jqXHR, textStatus, error) {
-        showError();
+        showError(jqXHR.status);
     });
   //If api call fails
   }).fail(function (jqXHR, textStatus, error) {
-        showError();
+        showError(jqXHR.status);
     });
 }
 //Creates an array of countries based on Value containing a currency
@@ -66,6 +72,6 @@ function getKeyByValue(object, value) {
   return arr;
 }
 //Shows error message
-function showError(){
-    document.getElementById('mapText').innerHTML = "The server isnt responding, please try again.";
+function showError(errorcode){
+    document.getElementById('mapText').innerHTML = "The server isnt responding: " + errorcode;
 }
